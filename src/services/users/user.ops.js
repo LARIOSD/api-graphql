@@ -1,16 +1,32 @@
-const sequelize = require('sequelize');
-const User = require('../../../db/models').user;
-console.log('aaa');
+const sql = require('../../../db/models');
+
 module.exports ={
     getAllUsers: async()=>{
-        const result = await User.findAll();
+        const result = await sql.user.findAll();
         return result;
     },
 
-    createUsers: async(userInformation)=>{
-        const result = await User.create({
-            where: {...userInformation}
+    getUserById: async(id)=>{
+        const result = await sql.user.findOne({where: {...id }});
+        return result;
+    },
+
+    createUser: async(userInformation)=>{
+        const result = await sql.user.create({...userInformation});
+        return result;
+    },
+
+    updateUser: async(id, userInformation)=>{
+        const result = await sql.user.update({...userInformation},{
+            where: { ...id }
         });
         return result;
     },
+
+    deleteUser: async(id)=>{
+        const result = await sql.user.destroy({
+            where: { ...id }
+        })
+        return result;
+    }
 }

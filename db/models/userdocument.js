@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     status   : DataTypes.CHAR
   }, {
     sequelize,
-    modelName: 'userDocument',
+    modelName: 'userDocuments',
   });
   return userDocument;
 };

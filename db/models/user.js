@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.user.hasOne(models.contactInfos, {foreignKey: 'id'})
     }
   }
   user.init({
-    user_id: {
-      type       : DataTypes.STRING(10),
-      allowNull  : false,
+    id: {
+      type       : DataTypes.INTEGER,
       unique     : true,
       primaryKey : true,
     },
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       type      : DataTypes.BOOLEAN,
       allowNull : false,
     },
-    name: {
+    username: {
       type      : DataTypes.STRING(20),
       allowNull : false,
     },
@@ -44,14 +44,14 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type      : DataTypes.STRING(64),
       allowNull : false,
-      unique    : true,
     },
-    updated_at : DataTypes.DATE,
-    created_at : DataTypes.DATE,
+    createdAt : DataTypes.DATE,
+    updatedAt : DataTypes.DATE,
   },{
-      timestamps      : false,
+      sequelize,
+      timestamps      : true,
       freezeTableName : true,
-      tableName       : 'user'
+      tableName       : 'users'
   });
   return user;
 };

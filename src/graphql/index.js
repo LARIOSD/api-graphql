@@ -2,100 +2,88 @@ const { buildSchema } = require('graphql');
 const { graphqlHTTP } = require('express-graphql');
 const userService = require('../services/users/users.services');
 
-const users= [
-  {
-    id                : 1,
-    lastName          : 'Larios',
-    isMiliary         : true,
-    timeCreate        : '10/2/30',
-    isTemporal        : 'false',
-    username          : 'David' ,
-    password          : 'pass1234',
-    email             : 'tomismo@gmail.com',
-    emailVerified     : 'ddddd',
-    verificationToken : 'aaaaaa',
-  },
-  {
-    id                : 2,
-    lastName          : 'Pautt',
-    isMiliary         : true,
-    timeCreate        : '10/2/30',
-    isTemporal        : 'false',
-    username          : 'Jordan' ,
-    password          : 'pass1234',
-    email             : 'Jordan@gmail.com',
-    emailVerified     : 'ddddd',
-    verificationToken : 'aaaaaa',
-  }
-];
-
-// const typeDocuments = [
-//   {
-//     id               : 1,
-//     nameTypeDocument : 'Cedula'
-//   },
-//   {
-//     id               : 1,
-//     nameTypeDocument : 'Passport'
-//   }
-// ];
-
-const getUser=(id)=>({
-  id                : 1,
-  lastName          : 'Larios',
-  isMiliary         : true,
-  timeCreate        : '10/2/30',
-  isTemporal        : 'false',
-  username          : 'David' ,
-  password          : 'pass1234',
-  email             : 'tomismo@gmail.com',
-  emailVerified     : 'ddddd',
-  verificationToken : 'aaaaaa',
-})
-
-const userSchema = buildSchema(`
+const schema = buildSchema(`
  type User {
-   id: ID!
+   id: Int
    lastName: String
-   isMiliary: Boolean
-   timeCreate: String
+   isMilitary: Boolean
    isTemporal: Boolean
    username: String 
    password: String
    email: String
    emailVerified: String
-   verificationToken : String
+   verificationToken: String
  }
-  type Query {
-    allUser: [User]!
-    getUserById(id: ID!): User
+
+ type TypeDocument {
+   id: Int
+   nameTypeDocument: String
   }
+
+ type ContactInfo {
+   id: Int! 
+   userId: Int
+   address: String
+   country: String
+   city: String
+   phone: String
+   celPhone: String
+   emergencyName: String,
+   emergencyPhone: String
+ }
+
+ type Country {
+  id: Int!
+  countryCode: String
+  countryName: String
+ }
+
+ type Mutation {
+   createUser(
+    lastName: String!
+    isMilitary: Boolean!
+    timeCreate: String!
+    isTemporal: Boolean!
+    username: String!
+    password: String!
+    email: String!
+    emailVerified: String!
+    verificationToken : String!
+   ): User!
+
+   updateUser(
+    id: Int!
+    lastName: String
+    isMilitary: Boolean
+    timeCreate: String
+    isTemporal: Boolean
+    username: String
+    password: String
+    email: String
+    emailVerified: String
+    verificationToken: String
+   ): User!
+
+   deleteUser(id: Int!): Int!
+ }
+
+ type Query {
+   getAllUser: [User]!
+   getUserById(id: Int!): User
+ }
 `);
 
-//const typeDocument = buildSchema(`
-//  type TypeDocument {
-//    id: Int
-//    nameTypeDocument: String
-//   }
+const resolvers = { 
+    getAllUser  : async()=> await userService.getAllUsers(),
+    getUserById : async(id)=> await userService.getUserById(id),
+    createUser  : async(user)=> await userService.createUser(user),
+    updateUser  : async({id,...userInformation})=> await userService.updateUser(id,userInformation),
+    deleteUser  : async(id)=> await userService.deleteUser(id)
+}
 
-//   type query {
-//     typeDocument: [TypeDocument]
-//   }
-// `);
-
-// const typeDocumentQueries = {
-//   typeDocuments: ()=> typeDocuments
-// }
-
-const userQueries = { 
-  allUser     : ()=> userService.getAllUsers(), 
-  getUserById : (id)=>{
-    return getUser(id);
-  }
-};
 const model = graphqlHTTP({
-  schema    : userSchema,
-  rootValue : userQueries,
+  schema    : schema,
+  rootValue : resolvers,
   context   : { startTime: Date.now() },
   graphiql  : true,
 })

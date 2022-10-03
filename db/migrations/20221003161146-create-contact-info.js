@@ -9,20 +9,41 @@ module.exports = {
         primaryKey    : true,
         type          : Sequelize.INTEGER
       },
-      username: {
-        type: Sequelize.STRING
+      userId: {
+        type: Sequelize.INTEGER,
       },
-      status: {
-        type: Sequelize.CHAR
-      },
-      createdAt: {
+      address: {
+        type      : Sequelize.STRING(60),
         allowNull : false,
-        type      : Sequelize.DATE
+        unique    : true
       },
-      updatedAt: {
+      countryId: {
+        type: Sequelize.INTEGER,
+      },
+      city: {
+        type      : Sequelize.STRING(50),
         allowNull : false,
-        type      : Sequelize.DATE
-      }
+      },
+      phone: {
+        type      : Sequelize.STRING(20),
+        allowNull : false,
+      },
+      celPhone: {
+        type      : Sequelize.STRING(20),
+        allowNull : false,
+      },
+      emergencyName: {
+        type      : Sequelize.STRING(100),
+        allowNull : false,
+      },
+      emergencyPhone: {
+        type      : Sequelize.STRING(20),
+        allowNull : false,
+      },
+    }, {
+      timestamps      : false,
+      freezeTableName : true,
+      modelName       : 'contactInfos',
     });
   },
   async down(queryInterface, Sequelize) {

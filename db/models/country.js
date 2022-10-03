@@ -11,14 +11,30 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.countries.hasMany(models.contactInfos, {foreignKey: 'id'})
     }
   }
   country.init({
-    username : DataTypes.STRING,
-    status   : DataTypes.CHAR
+    id: {
+      type          : DataTypes.INTEGER,
+      autoIncrement : true,
+      primaryKey    : true
+    },
+    countryCode: {
+      type      : DataTypes.STRING(4),
+      allowNull : false,
+      unique    : true
+    },
+    countryName: {
+      type      : DataTypes.STRING(100),
+      allowNull : false,
+      unique    : true
+    },
   }, {
     sequelize,
-    modelName: 'country',
+    timestamps      : false,
+    freezeTableName : true,
+    modelName       : 'countries',
   });
   return country;
 };
