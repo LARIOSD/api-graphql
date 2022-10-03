@@ -1,5 +1,6 @@
-var { buildSchema } = require('graphql');
-var { graphqlHTTP } = require('express-graphql');
+const { buildSchema } = require('graphql');
+const { graphqlHTTP } = require('express-graphql');
+const userService = require('../services/users/users.services');
 
 const users= [
   {
@@ -87,7 +88,7 @@ const userSchema = buildSchema(`
 // }
 
 const userQueries = { 
-  allUser     : ()=> users, 
+  allUser     : ()=> userService.getAllUsers(), 
   getUserById : (id)=>{
     return getUser(id);
   }
