@@ -10,10 +10,22 @@ module.exports = {
         allowNull     : false
       },
       userId: {
-        type: Sequelize.INTEGER,
+        type       : Sequelize.INTEGER,
+        references : {
+          model : 'users',
+          key   : 'id'
+        },
+        onDelete : 'CASCADE',
+        onUpdate : 'CASCADE'
       },
       countryId: {
-        type: Sequelize.INTEGER,
+        type       : Sequelize.INTEGER,
+        references : {
+          model : 'countries',
+          key   : 'id'
+        },
+        onDelete : 'CASCADE',
+        onUpdate : 'CASCADE'
       },
       address: {
         type      : Sequelize.STRING(60),

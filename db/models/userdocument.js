@@ -11,14 +11,42 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.userDocuments.belongsTo(models.user, { foreignKey: 'id' })
+      models.userDocuments.belongsTo(models.typeDocuments, { foreignKey: 'id' })
     }
   }
   userDocument.init({
-    username : DataTypes.STRING,
-    status   : DataTypes.CHAR
+    id: {
+      type          : DataTypes.INTEGER,
+      autoIncrement : true,
+      primaryKey    : true,
+    },
+    userId: {
+      type      : DataTypes.INTEGER,
+      allowNull : false
+    },
+    typeDocumentId: {
+      type      : DataTypes.INTEGER,
+      allowNull : false
+    },
+    Document: {
+      type      : DataTypes.STRING(20),
+      unique    : true,
+      allowNull : false,
+    },
+    placeExpedition: {
+      allowNull : false,
+      type      : DataTypes.STRING(60)
+    },
+    dateExpedition: {
+      allowNull : false,
+      type      : DataTypes.DATE,
+    }
   }, {
     sequelize,
-    modelName: 'userDocuments',
+    timestamps      : false,
+    freezeTableName : true,
+    modelName       : 'userDocuments',
   });
   return userDocument;
 };

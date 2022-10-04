@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       models.contactInfos.belongsTo(models.user, { foreignKey: 'id' })
       models.contactInfos.belongsTo(models.countries, { foreignKey: 'id' })
-
     }
   }
   contactInfo.init({

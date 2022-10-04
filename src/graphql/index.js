@@ -13,6 +13,20 @@ const schema = buildSchema(`
    email: String
    emailVerified: String
    verificationToken: String
+   createAt: String
+   document: Document!
+   typeDocument: TypeDocument!
+   contactInfo : ContactInfo!
+   country: Country!
+ }
+
+ type Document {
+   id: Int
+   userId: Int
+   document: String
+   typeDocumentId: Int
+   placeExpedition: String
+   dateExpedition: String
  }
 
  type TypeDocument {
@@ -24,7 +38,7 @@ const schema = buildSchema(`
    id: Int! 
    userId: Int
    address: String
-   country: String
+   countryId: Int
    city: String
    phone: String
    celPhone: String
@@ -38,30 +52,44 @@ const schema = buildSchema(`
   countryName: String
  }
 
+input UserData {
+  lastName: String!
+  isMilitary: Boolean!
+  isTemporal: Boolean!
+  username: String!
+  password: String!
+  email: String!
+  emailVerified: String!
+  verificationToken: String!
+}
+
+input DocumentData {
+  document: String
+  typeDocumentId: Int
+  placeExpedition: String
+  dateExpedition: String
+}
+
+input ContactInfoData {
+  address: String
+  countryId: Int
+  city: String
+  phone: String
+  celPhone: String
+  emergencyName: String,
+  emergencyPhone: String
+}
+
  type Mutation {
    createUser(
-    lastName: String!
-    isMilitary: Boolean!
-    timeCreate: String!
-    isTemporal: Boolean!
-    username: String!
-    password: String!
-    email: String!
-    emailVerified: String!
-    verificationToken : String!
+    user: UserData!
+    document: DocumentData!
+    contact: ContactInfoData!
    ): User!
 
    updateUser(
     id: Int!
-    lastName: String
-    isMilitary: Boolean
-    timeCreate: String
-    isTemporal: Boolean
-    username: String
-    password: String
-    email: String
-    emailVerified: String
-    verificationToken: String
+    userInformation: UserData!
    ): User!
 
    deleteUser(id: Int!): Int!
@@ -76,14 +104,15 @@ const schema = buildSchema(`
 const resolvers = { 
     getAllUser  : async()=> await userService.getAllUsers(),
     getUserById : async(id)=> await userService.getUserById(id),
-    createUser  : async(user)=> await userService.createUser(user),
-    updateUser  : async({id,...userInformation})=> await userService.updateUser(id,userInformation),
+    createUser  : async(userInformation)=> await userService.createUser(userInformation),
+    updateUser  : async(id, userInformation)=> await userService.updateUser(id, userInformation),
     deleteUser  : async(id)=> await userService.deleteUser(id)
 }
 
 const model = graphqlHTTP({
   schema    : schema,
   rootValue : resolvers,
+  pretty    : true,
   context   : { startTime: Date.now() },
   graphiql  : true,
 })

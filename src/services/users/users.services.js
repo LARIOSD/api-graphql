@@ -1,5 +1,7 @@
+const config = require('../../config');
 const userModel = require('./user.ops');
-
+const userHooks = require('./user.hooks');
+const crypto = require('../../libraries/tools/crypto');
 module.exports = {
     getAllUsers: async()=>{
         const response = await userModel.getAllUsers();
@@ -12,12 +14,36 @@ module.exports = {
     },
 
     createUser: async(userInformation)=>{
-        const response = await userModel.createUser(userInformation);
-        return response;
+        try {
+            const id  = await userHooks.userCreate(userInformation);
+            const response = await userModel.getOneUser({id});
+           // const { password, email, ...userInformationCopy } = userInformation;
+   
+           // const isFinedUser = !!await userModel.getOneUser({ email });
+   
+           // if (isFinedUser) {
+           //     throw new Error('User email already exits');
+           // }
+   
+           // const passwordEncrypt = crypto.encryptString(config.keySecret ,password);
+   
+           // const response = await userModel.createUser({...userInformationCopy, email, password: passwordEncrypt});
+           return response;
+        } catch (error) {
+            console.log(error);
+        }
+ 
     },
     
     updateUser: async(id, userInformation)=>{
-        await userModel.updateUser({id},userInformation);
+        const { email, ...userInformationCopy } = userInformation;
+
+        const isFinedUser = !!await userModel.getOneUser({ email });
+
+        if (isFinedUser) {
+            throw new Error('User email already exits');
+        }
+        await userModel.updateUser({ id }, {email, ...userInformationCopy});
         const response = await userModel.getUserById({ id });
         return response;
     },
@@ -26,5 +52,4 @@ module.exports = {
       const response = await userModel.deleteUser(id);
       return response;
     }
-
 }

@@ -11,14 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.user.hasOne(models.contactInfos, {foreignKey: 'id'})
+      models.user.hasOne(models.contactInfos, {foreignKey: 'userId'})
+      models.user.hasOne(models.userDocuments, {foreignKey: 'userId'})
     }
   }
   user.init({
     id: {
       type       : DataTypes.INTEGER,
-      unique     : true,
       primaryKey : true,
+      unique     : true,
     },
     isMilitary: {
       type      : DataTypes.BOOLEAN,
@@ -45,8 +46,6 @@ module.exports = (sequelize, DataTypes) => {
       type      : DataTypes.STRING(64),
       allowNull : false,
     },
-    createdAt : DataTypes.DATE,
-    updatedAt : DataTypes.DATE,
   },{
       sequelize,
       timestamps      : true,
