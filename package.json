@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development nodemon src/index.js",
-    "build":"cd db && sequelize db:migrate",
+    "build":"cd db && sequelize db:migrate && sequelize db:seed:all",
     "start": "NODE_ENV=production node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -4,21 +4,21 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('contactInfos', {
       id: {
-        allowNull     : false,
+        type          : Sequelize.INTEGER,
         autoIncrement : true,
         primaryKey    : true,
-        type          : Sequelize.INTEGER
+        allowNull     : false
       },
       userId: {
+        type: Sequelize.INTEGER,
+      },
+      countryId: {
         type: Sequelize.INTEGER,
       },
       address: {
         type      : Sequelize.STRING(60),
         allowNull : false,
         unique    : true
-      },
-      countryId: {
-        type: Sequelize.INTEGER,
       },
       city: {
         type      : Sequelize.STRING(50),

@@ -4,26 +4,17 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('countries', {
       id: {
-        allowNull     : false,
+        type          : Sequelize.INTEGER,
         autoIncrement : true,
         primaryKey    : true,
-        type          : Sequelize.INTEGER
+        allowNull     : false
       },
-      username: {
-        type: Sequelize.STRING
+      countryCode: {
+        type: Sequelize.STRING(4)
       },
-      status: {
-        type: Sequelize.CHAR
+      countryName: {
+        type: Sequelize.STRING(100)
       },
-      createdAt: {
-        allowNull : false,
-        type      : Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull    : false,
-        type         : Sequelize.DATE,
-        defaultValue : Sequelize.NOW,
-      }
     });
   },
   async down(queryInterface, Sequelize) {

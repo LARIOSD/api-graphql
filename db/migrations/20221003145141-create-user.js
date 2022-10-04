@@ -4,9 +4,10 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('users', {
       id: {
+        type          : Sequelize.INTEGER,
         autoIncrement : true,
         primaryKey    : true,
-        type          : Sequelize.INTEGER
+        allowNull     : false,
       },
       isMilitary: {
         type      : Sequelize.BOOLEAN,
