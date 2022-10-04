@@ -2,7 +2,20 @@ const sql = require('../../../db/models');
 
 module.exports ={
     getAllUsers: async()=>{
-        const result = await sql.user.findAll();
+        const result = await sql.user.findAll({
+          include: [
+            {
+                model: sql.userDocuments
+            }
+          ]
+        });
+
+        console.log('result', result);
+        return result;
+    },
+    
+    getOneUser: async(parameters)=>{
+        const result = await sql.user.findOne({where: {...parameters }});
         return result;
     },
 
@@ -10,6 +23,7 @@ module.exports ={
         const result = await sql.user.findOne({where: {...id }});
         return result;
     },
+
 
     createUser: async(userInformation)=>{
         const result = await sql.user.create({...userInformation});

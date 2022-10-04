@@ -6,19 +6,11 @@ module.exports = {
     return result
   },
 
-  createContactInfo: async() => {
+  createContactInfo: async(contactInfoData) => {
     const result = await sql.contactInfo.create({
-      userId         : 1,
-      address        : '193256454',
-      countryId      : 1,
-      city           : 'soledad',
-      phone          : '13132131',
-      celPhone       : '4564654',
-      emergencyName  : 'sdjkhsdk',
-      emergencyPhone : '54545'
+     ...contactInfoData
     });
 
     return result
-
   }
 }

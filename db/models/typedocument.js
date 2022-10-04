@@ -11,14 +11,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.typeDocuments.hasMany(models.userDocuments, {foreignKey: 'typeDocumentId'});
     }
   }
   typeDocument.init({
-    username : DataTypes.STRING,
-    status   : DataTypes.CHAR
+    id: {
+      type          : DataTypes.INTEGER,
+      autoIncrement : true,
+      primaryKey    : true,
+    },
+    nameTypeDocument: {
+      type      : DataTypes.STRING(50),
+      allowNull : false,
+    },
   }, {
     sequelize,
-    modelName: 'typeDocuments',
+    timestamps      : false,
+    freezeTableName : true,
+    modelName       : 'typeDocuments',
   });
   return typeDocument;
 };

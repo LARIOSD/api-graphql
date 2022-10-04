@@ -6,8 +6,8 @@ module.exports = {
     return response
   },
 
-  createContactInfo: async () => {
-    const response = await contactInfoModal.createUsers();
+  createContactInfo: async (contactInfoData) => {
+    const response = await contactInfoModal.createUsers(contactInfoData);
     return response;
   },
 }

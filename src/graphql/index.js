@@ -13,6 +13,20 @@ const schema = buildSchema(`
    email: String
    emailVerified: String
    verificationToken: String
+   createAt: String
+   document: Document!
+   typeDocument: TypeDocument!
+   contactInfo : ContactInfo!
+   country: Country!
+ }
+
+ type Document {
+   id: Int
+   userId: Int
+   document: String
+   typeDocumentId: Int
+   placeExpedition: String
+   dateExpedition: String
  }
 
  type TypeDocument {
@@ -38,17 +52,17 @@ const schema = buildSchema(`
   countryName: String
  }
 
+ input UserInformation {
+  user : User!
+  document: Document!
+  typeDocument: TypeDocument!
+  contactInfo : ContactInfo!
+  country: Country!
+ }
+
  type Mutation {
    createUser(
-    lastName: String!
-    isMilitary: Boolean!
-    timeCreate: String!
-    isTemporal: Boolean!
-    username: String!
-    password: String!
-    email: String!
-    emailVerified: String!
-    verificationToken : String!
+    user: UserInformation!
    ): User!
 
    updateUser(
@@ -84,6 +98,7 @@ const resolvers = {
 const model = graphqlHTTP({
   schema    : schema,
   rootValue : resolvers,
+  pretty    : true,
   context   : { startTime: Date.now() },
   graphiql  : true,
 })

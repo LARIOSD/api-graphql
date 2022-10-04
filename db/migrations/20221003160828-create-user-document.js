@@ -9,13 +9,30 @@ module.exports = {
         primaryKey    : true,
         allowNull     : false
       },
+      userId: {
+        type       : Sequelize.INTEGER,
+        allowNull  : false,
+        references : {
+          model : 'users',
+          key   : 'id'
+        },
+        onDelete : 'CASCADE',
+        onUpdate : 'CASCADE'
+      },
       typeDocumentId: {
-        type      : Sequelize.INTEGER,
-        allowNull : false
+        type       : Sequelize.INTEGER,
+        allowNull  : false,
+        references : {
+          model : 'typeDocuments',
+          key   : 'id'
+        },
+        onDelete : 'CASCADE',
+        onUpdate : 'CASCADE'
       },
       Document: {
         type      : Sequelize.STRING(20),
         allowNull : false,
+        unique    : true
       },
       placeExpedition: {
         allowNull : false,
