@@ -1,33 +1,18 @@
-const sql = require('../../../db/models');
-
+const userModel = require('./user.ops');
+const { sequelize } = require('../../../db/models');
+const contactModel = require('../contact-info/contact-info.ops');
+const userDocumentsModel = require('../user-document/user-document.ops');
 module.exports = {
-  userCreate: async()=>{
-    
-  }
+  userCreate: async({
+    user,
+    contact,
+    documents
+  })=> sequelize.transaction(
+    async(transaction)=>{
+      const { id } = await userModel.createUser({ ...user }, transaction);
+      await contactModel.createContactInfo({userId: id, ...contact}, transaction);
+      await userDocumentsModel.createUserDocument({userId: id, ...documents}, transaction);
+      return id;
+    }
+  )
 }
-
-// createLock: async ({
-//   serial,
-//   ipAddress,
-//   accessAreaId,
-//   actuatorType,
-//   actuatorData,
-//   accessLock,
-// }) => sql.access_control.transaction(
-//   async (transaction) => {
-//     const { actuatorId } = await actuatorModel.insert(
-//       { actuatorType, actuatorData }, transaction,
-//     );
-
-//     const { accessLockId } = await accessLockModel.insert(
-//       { ...accessLock, actuatorId }, transaction,
-//     );
-
-//     await lockModel.insert({ serial, ipAddress, accessLockId }, transaction);
-
-//     if (accessLock.status === 'entry') {
-//       await locksInAreasModel.insert({ accessAreaId, accessLockId }, transaction);
-//     }
-//     return accessLockId;
-//   },
-// ),

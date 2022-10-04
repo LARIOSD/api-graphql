@@ -17,9 +17,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   user.init({
     id: {
-      type       : DataTypes.INTEGER,
-      primaryKey : true,
-      unique     : true,
+      type          : DataTypes.INTEGER,
+      autoIncrement : true,
+      primaryKey    : true,
+      unique        : true,
     },
     isMilitary: {
       type      : DataTypes.BOOLEAN,

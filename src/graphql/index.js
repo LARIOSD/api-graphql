@@ -27,6 +27,7 @@ const schema = buildSchema(`
    typeDocumentId: Int
    placeExpedition: String
    dateExpedition: String
+   typeDocument: TypeDocument!
  }
 
  type TypeDocument {
@@ -38,12 +39,13 @@ const schema = buildSchema(`
    id: Int! 
    userId: Int
    address: String
-   country: String
+   countryId: Int
    city: String
    phone: String
    celPhone: String
    emergencyName: String,
    emergencyPhone: String
+   country: Country!
  }
 
  type Country {
@@ -52,30 +54,39 @@ const schema = buildSchema(`
   countryName: String
  }
 
- input UserInformation {
-  user : User!
-  document: Document!
-  typeDocument: TypeDocument!
-  contactInfo : ContactInfo!
-  country: Country!
- }
+input UserData {
+  lastName: String!
+  isMilitary: Boolean!
+  isTemporal: Boolean!
+  username: String!
+  password: String!
+  email: String!
+  emailVerified: String!
+  verificationToken: String!
+}
+
+input DocumentData {
+  document: String
+  typeDocumentId: Int
+  placeExpedition: String
+  dateExpedition: String
+}
+
+input ContactInfoData {
+  address: String
+  countryId: Int
+  city: String
+  phone: String
+  celPhone: String
+  emergencyName: String
+  emergencyPhone: String
+}
 
  type Mutation {
    createUser(
-    user: UserInformation!
-   ): User!
-
-   updateUser(
-    id: Int!
-    lastName: String
-    isMilitary: Boolean
-    timeCreate: String
-    isTemporal: Boolean
-    username: String
-    password: String
-    email: String
-    emailVerified: String
-    verificationToken: String
+    user: UserData!
+    documents: DocumentData!
+    contact: ContactInfoData!
    ): User!
 
    deleteUser(id: Int!): Int!
@@ -90,8 +101,7 @@ const schema = buildSchema(`
 const resolvers = { 
     getAllUser  : async()=> await userService.getAllUsers(),
     getUserById : async(id)=> await userService.getUserById(id),
-    createUser  : async(user)=> await userService.createUser(user),
-    updateUser  : async({id,...userInformation})=> await userService.updateUser(id,userInformation),
+    createUser  : async(userInformation)=> await userService.createUser(userInformation),
     deleteUser  : async(id)=> await userService.deleteUser(id)
 }
 

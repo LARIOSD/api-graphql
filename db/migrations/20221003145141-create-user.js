@@ -7,7 +7,7 @@ module.exports = {
         type          : Sequelize.INTEGER,
         autoIncrement : true,
         primaryKey    : true,
-        allowNull     : false,
+        unique        : true
       },
       isMilitary: {
         type      : Sequelize.BOOLEAN,

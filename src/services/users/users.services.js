@@ -1,10 +1,17 @@
+const config = require('../../config');
 const userModel = require('./user.ops');
+const userHooks = require('./user.hooks');
 const crypto = require('../../libraries/tools/crypto');
-const config = require('../../config')
+const userDocumentsModel = require('../user-document/user-document.ops');
+
 module.exports = {
     getAllUsers: async()=>{
-        const response = await userModel.getAllUsers();
-        return response;
+        try {
+            const response = await userModel.getAllUsers();
+            return response;
+        } catch (error) {
+            return error;
+        }
     },
     
     getUserById: async(id)=>{
@@ -13,23 +20,29 @@ module.exports = {
     },
 
     createUser: async(userInformation)=>{
-        const { password, email, ...userInformationCopy } = userInformation;
+        try {
+            const { user, documents, contact } = userInformation;
+            const { password, email, ...userCopy } = user;
 
-        const isFinedUser = !!await userModel.getOneUser({ email });
+            const isFinedUser = !!await userModel.getOneUser({ email });
+            const isDocumentUser = !!await userDocumentsModel.getOneUserDocument({ document: documents.document });
 
-        if (isFinedUser) {
-            throw new Error('User email already exits');
+            
+            if (isFinedUser || isDocumentUser) throw new Error('User already exits');
+            
+            const passwordEncrypt = crypto.encryptString(config.keySecret ,password);
+
+            const id  = await userHooks.userCreate({ password: passwordEncrypt, email, userCopy }, documents, contact);
+            const response = await userModel.getOneUser({ id });
+            console.log(response);
+           return response;
+        } catch (error) {
+            return error;
         }
-
-        const passwordEncrypt = crypto.encryptString(config.keySecret ,password);
-
-        const response = await userModel.createUser({...userInformationCopy, email, password: passwordEncrypt});
-        return response;
     },
     
     updateUser: async(id, userInformation)=>{
         const { email, ...userInformationCopy } = userInformation;
-
         const isFinedUser = !!await userModel.getOneUser({ email });
 
         if (isFinedUser) {
@@ -44,5 +57,4 @@ module.exports = {
       const response = await userModel.deleteUser(id);
       return response;
     }
-
 }

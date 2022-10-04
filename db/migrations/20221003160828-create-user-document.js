@@ -29,7 +29,7 @@ module.exports = {
         onDelete : 'CASCADE',
         onUpdate : 'CASCADE'
       },
-      Document: {
+      document: {
         type      : Sequelize.STRING(20),
         allowNull : false,
         unique    : true

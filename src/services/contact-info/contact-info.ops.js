@@ -2,14 +2,14 @@ const sql = require('../../../db/models')
 
 module.exports = {
   getAllContactInfo: async() => {
-    const result = await sql.contactInfo.findAll();
+    const result = await sql.contactInfos.findAll();
     return result
   },
 
-  createContactInfo: async(contactInfoData) => {
-    const result = await sql.contactInfo.create({
+  createContactInfo: async(contactInfoData,transaction) => {
+    const result = await sql.contactInfos.create({
      ...contactInfoData
-    });
+    },{transaction});
 
     return result
   }
